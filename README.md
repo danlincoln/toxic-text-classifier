@@ -9,6 +9,9 @@ another running Python.
 
 ## Getting Started
 
+You will need to download the data set from Kaggle for this project. See
+[data/README.md](data/README.md) for more details.
+
 1. Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
     * For more information, guides, and manuals on using Docker, see the 
