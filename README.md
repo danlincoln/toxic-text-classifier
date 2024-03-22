@@ -9,15 +9,15 @@ another running Python.
 
 ## Getting Started
 
-You will need to download the data set from Kaggle for this project. See
+1. You will need to download the data set from Kaggle for this project. See
 [data/README.md](data/README.md) for more details.
 
-1. Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+2. Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
     * For more information, guides, and manuals on using Docker, see the 
     [Docker Documentation](https://docs.docker.com/).
 
-2. Open a terminal and navigate to the root directory of this project (the same
+3. Open a terminal and navigate to the root directory of this project (the same
 level `docker-compose.yml` is on).
 
     * Mac example (assuming you saved the project to your downloads folder):
@@ -28,7 +28,7 @@ level `docker-compose.yml` is on).
 
             cd %USERPROFILE%\Downloads\toxic-text-classifier
 
-3. Start the containers using Docker Compose.
+4. Start the containers using Docker Compose.
 
         $ docker compose up
 
@@ -37,7 +37,7 @@ level `docker-compose.yml` is on).
 
             $ docker compose up -d
 
-4. When you see startup has completed, open a browser and navigate to 
+5. When you see startup has completed, open a browser and navigate to 
 [http://localhost:8000](http://localhost:8000)
 
 ## Update Environment Variables
