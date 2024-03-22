@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <p>This machine learning application classifies text as either toxic or non-toxic. Enter 
+                some text below and click “classify” to try it out.</p>
+        </div>
+    </div>    
+    {% if error_message %}
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-danger" role="alert">
+                {{error_message}}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="row">
+        <div class="col">
+            <form id="form_classify" action="classify" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <textarea type="textbox" name="unprocessed_text" class="form-control" placeholder="Enter text to classify here..." rows="4"></textarea>
+                </div>
+                <div class="d-grid gap-2 d-md-block">
+                    <button id="button_classify" class="btn btn-primary" type="submit">Classify</button>
+                    <a href="/" class="btn btn-secondary">Clear</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% if text %}
+    <div class="row">
+        <div class="col">
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="container text-start mb-3 py-3 bg-white border">
+                <div class="row">
+                    <div class="col-1 col-sm-2 text-center d-flex align-items-center">
+                        <div class="mx-auto">
+                            {% if text.machinerating.rating %}
+                            <span class="badge text-bg-danger p-2">Toxic</span>
+                            {% else %}
+                            <span class="badge text-bg-success p-2">Not Toxic</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col ps-0">
+                        <div class="font-monospace py-2">{{ text.unprocessed }}</div>
+                    </div>
+                    <div class="col-2 col-sm-4 d-flex align-items-center">
+                        <div class="mx-auto">
+                            <span class="fs-6">Confidence: </span>
+                            <span class="badge text-bg-secondary p-2">
+                                {% if text.machinerating.rating %}
+                                {{ p_toxic }}
+                                {% else %}
+                                {{ p_not_toxic }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8"/>
+        <title>{% block title %}Toxic Text Classifier{% endblock %}</title>
+        <link rel="icon" href="{% static 'img/robot.svg' %}" type="img/svg+xml" />
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript">
+            window.addEventListener("load", (event) => {
+                const btn = document.getElementById("button_classify");
+                const form = document.getElementById("form_classify");
+                btn.addEventListener("click", (event) => {
+                    form.submit();
+                });
+                form.addEventListener("submit", (event) => {
+                    btn.innerHTML = `<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Processing...`;
+                    btn.setAttribute("disabled", true);
+                });
+            });
+        </script>
+    </head>
+    <body class="d-flex flex-column min-vh-100 bg-light">
+        <nav class="header navbar bg-primary bg-gradient p-4 mb-4">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        <a class="navbar-brand text-light" href="/">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" fill="currentColor" class="bi bi-robot" viewBox="0 0 16 16">
+                                    <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a25 25 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135"/>
+                                    <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5"/>
+                                </svg>
+                            </span>
+                            <span class="fs-3 align-middle ms-2">Toxic Text Classifier</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div id="main-content" class="container my-3">
+            <div class="row mb-2">
+                {% block content %}
+                <p>Main content container</p>
+                {% endblock %}
+            </div>
+        </div>
+        <div class="footer mt-auto text-center bg-body-secondary p-4 border-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col my-auto">
+                        C964 - Computer Science Capstone
+                    </div>
+                    <div class="col">
+                        <a href="https://www.wgu.edu/">
+                            <img style="height: 80px" src="{% static 'img/WGU-Marketing-logo.png' %}" />
+                        </a>
+                    </div>
+                    <div class="col my-auto">
+                        <a class="icon-link link-underline link-underline-opacity-0" href="https://github.com/danlincoln">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+                                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+                            </svg>
+                            danlincoln
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
