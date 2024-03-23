@@ -21,7 +21,7 @@
             <form id="form_classify" action="classify" method="post">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <textarea type="textbox" name="unprocessed_text" class="form-control" placeholder="Enter text to classify here..." rows="4"></textarea>
+                    <textarea type="textbox" name="unprocessed_text" class="form-control" placeholder="Enter text to classify here." rows="4"></textarea>
                 </div>
                 <div class="d-grid gap-2 d-md-block">
                     <button id="button_classify" class="btn btn-primary" type="submit">Classify</button>
