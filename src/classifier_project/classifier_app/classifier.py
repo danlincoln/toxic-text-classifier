@@ -4,15 +4,18 @@ import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 import pandas.io.sql as psql
+import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
 import sqlalchemy
-import string
 from typing import Self
 
 logger = logging.getLogger("Classifier")
+
+space = r"[-_+=/\\|]"
+no_space = r"[!@#$%^&*(){}[\];:'\",.?`~]"
 
 
 class Classifier(object):
@@ -21,6 +24,7 @@ class Classifier(object):
     once and this object is stored as a singleton, which is retrieved any time
     new instances are requested.
     """
+
     _instance = None
     _pipeline = None
 
@@ -126,14 +130,23 @@ def preprocess(text: str):
         list[str]: The list of lemmatized words.
     """
     wnl = WordNetLemmatizer()
-    result = text.lower()  # Force lowercase
-    result = result.strip()  # Remove leading/trailing spaces
-    result = word_tokenize(result)  # Split into a list
-    result = list(
-        filter(  # Remove isolated punctuation
-            lambda x: x not in string.punctuation, result
-        )
-    )
+
+    # Make sure we have a string
+    result = str(text)
+
+    # Lowercase
+    result = result.lower()
+
+    # Remove punctuation
+    result = re.sub(space, " ", result)
+    result = re.sub(no_space, "", result)
+
+    # Remove leading/trailing spaces
+    result = result.strip()
+
+    # Split into a list for lemmatization
+    result = word_tokenize(result)
+
     # Lemmatize each word
     result = [wnl.lemmatize(w, pos=p) for w, p in pos_tags(result)]
 
