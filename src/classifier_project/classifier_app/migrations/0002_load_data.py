@@ -6,6 +6,7 @@ from django.db import migrations
 import logging
 import multiprocessing
 import pandas
+import time
 
 logging.basicConfig(
     format="%(asctime)s [%(name)s] %(levelname)s - %(message)s",
@@ -48,9 +49,14 @@ def save_data(processed_queue: multiprocessing.Queue):
 
 def load_data(apps, schema_editor):
     """Load records from CSV"""
+
+    start = time.time()
     Text = apps.get_model("classifier_app", "Text")
     if Text.objects.count() > 0:
+        logger.info("Database is loaded already, skipping CSV load.")
         return  # Do not load if the database has records.
+
+    logger.log("Beginning data preprocessing and load from CSV.")
 
     HumanRating = apps.get_model("classifier_app", "HumanRating")
     HumanRatingClass = apps.get_model("classifier_app", "HumanRatingClass")
@@ -70,6 +76,7 @@ def load_data(apps, schema_editor):
 
     df = pandas.read_csv(csvfile)
     length = len(df)
+    threshold = length // 100
     for i, series in df.iterrows():
         text = Text(id=series["id"], unprocessed=series["comment_text"])
         text.humanrating = HumanRating(
@@ -86,8 +93,8 @@ def load_data(apps, schema_editor):
             sexual_explicit=series["sexual_explicit"],
         )
         unprocessed_queue.put(text)
-        if i % 1000 == 0:
-            logger.info(f"Loading data: {i/length:6.2%}")
+        if i % threshold == 0:
+            logger.info(f"Loading data: {i/length:4.0%}")
 
     for _ in range(num_processors):
         unprocessed_queue.put(None)
@@ -97,6 +104,9 @@ def load_data(apps, schema_editor):
 
     saver_pool.close()
     saver_pool.join()
+
+    min, sec = divmod(time.time() - start, 60)
+    logger.info(f"Data loading completed in {int(min)}m {int(sec)}s.")
 
 
 class Migration(migrations.Migration):
