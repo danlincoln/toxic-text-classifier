@@ -9,13 +9,14 @@ import pandas
 
 logging.basicConfig(
     format="%(asctime)s [%(name)s] %(levelname)s - %(message)s",
-    level=logging.INFO
+    level=logging.INFO,
 )
 logger = logging.getLogger("LoadData")
 
 csvfile = "/data/train.csv"
 
-num_processors = 4
+num_processors = max(1, multiprocessing.cpu_count())
+num_savers = 1
 
 
 def process_data(
@@ -57,10 +58,15 @@ def load_data(apps, schema_editor):
     unprocessed_queue = multiprocessing.Queue(maxsize=20)
     processed_queue = multiprocessing.Queue(maxsize=20)
 
+    logger.info(f"Building processor pool: {num_processors} processes")
     processor_pool = multiprocessing.Pool(
         num_processors, process_data, (unprocessed_queue, processed_queue)
     )
-    saver_pool = multiprocessing.Pool(1, save_data, (processed_queue,))
+
+    logger.info(f"Building saver pool: {num_savers} processes")
+    saver_pool = multiprocessing.Pool(
+        num_savers, save_data, (processed_queue,)
+    )
 
     df = pandas.read_csv(csvfile)
     length = len(df)
@@ -77,7 +83,7 @@ def load_data(apps, schema_editor):
             threat=series["threat"],
             insult=series["insult"],
             identity_attack=series["identity_attack"],
-            sexual_explicit=series["sexual_explicit"]
+            sexual_explicit=series["sexual_explicit"],
         )
         unprocessed_queue.put(text)
         if i % 1000 == 0:
@@ -99,6 +105,4 @@ class Migration(migrations.Migration):
         ("classifier_app", "0001_initial"),
     ]
 
-    operations = [
-        migrations.RunPython(load_data)
-    ]
+    operations = [migrations.RunPython(load_data)]
