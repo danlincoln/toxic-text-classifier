@@ -63,7 +63,7 @@ class Classifier(object):
             [
                 (
                     "vect",
-                    TfidfVectorizer(max_df=0.8, min_df=1, ngram_range=(1, 2)),
+                    TfidfVectorizer(max_df=0.6, min_df=3, ngram_range=(1, 2)),
                 ),
                 ("chi2", SelectKBest(chi2, k=10000)),
                 ("mnb", MultinomialNB(alpha=1e-06)),
