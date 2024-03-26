@@ -84,9 +84,9 @@ class Classifier(object):
             classification (boolean) and a tuple of floats (probability
             false, probability true).
         """
-        logger.info(f"Classifying {text}")
         prediction = self._pipeline.predict([text])[0]
         probability = max(self._pipeline.predict_proba([text])[0])
+        logger.info(f"Classified `{text}`: {prediction}[{probability}]")
         return prediction, probability
 
 
