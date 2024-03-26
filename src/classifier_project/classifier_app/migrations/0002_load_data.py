@@ -56,7 +56,7 @@ def load_data(apps, schema_editor):
         logger.info("Database is loaded already, skipping CSV load.")
         return  # Do not load if the database has records.
 
-    logger.log("Beginning data preprocessing and load from CSV.")
+    logger.info("Beginning data preprocessing and load from CSV.")
 
     HumanRating = apps.get_model("classifier_app", "HumanRating")
     HumanRatingClass = apps.get_model("classifier_app", "HumanRatingClass")
