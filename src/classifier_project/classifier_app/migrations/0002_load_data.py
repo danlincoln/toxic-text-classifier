@@ -24,19 +24,22 @@ def process_data(
     unprocessed_queue: multiprocessing.Queue,
     processed_queue: multiprocessing.Queue,
 ):
+    """Data preprocessing worker for multi-processing."""
     while True:
         text = unprocessed_queue.get()
-        if text is None:
+        if text is None:  # None means done.
             processed_queue.put(None)
             break
         text.processed = preprocess(text.unprocessed)
-        processed_queue.put(text)
+        processed_queue.put(text)  # Hand off the record to the saver queue.
 
 
 def save_data(processed_queue: multiprocessing.Queue):
+    """Data saving worker for multi-processing."""
     count_done = 0
     while True:
         text = processed_queue.get()
+        # A number of Nones equal to number of preprocessors means done.
         if text is None:
             count_done += 1
             if count_done == num_processors:
@@ -61,23 +64,28 @@ def load_data(apps, schema_editor):
     HumanRating = apps.get_model("classifier_app", "HumanRating")
     HumanRatingClass = apps.get_model("classifier_app", "HumanRatingClass")
 
+    # Distribute preprocessing across multiple processes to speed up the app.
     unprocessed_queue = multiprocessing.Queue(maxsize=20)
     processed_queue = multiprocessing.Queue(maxsize=20)
 
+    # Build preprocessor work pool.
     logger.info(f"Building processor pool: {num_processors} processes")
     processor_pool = multiprocessing.Pool(
         num_processors, process_data, (unprocessed_queue, processed_queue)
     )
 
+    # Build saver work pool.
     logger.info(f"Building saver pool: {num_savers} processes")
     saver_pool = multiprocessing.Pool(
         num_savers, save_data, (processed_queue,)
     )
 
+    # Load from the CSV.
     df = pandas.read_csv(csvfile)
     length = len(df)
     threshold = length // 100
     for i, series in df.iterrows():
+        # Create & load model objects, then send to preprocessors and savers.
         text = Text(id=series["id"], unprocessed=series["comment_text"])
         text.humanrating = HumanRating(
             text=text,
@@ -92,10 +100,11 @@ def load_data(apps, schema_editor):
             identity_attack=series["identity_attack"],
             sexual_explicit=series["sexual_explicit"],
         )
-        unprocessed_queue.put(text)
+        unprocessed_queue.put(text)  # Send the work for processing.
         if i % threshold == 0:
             logger.info(f"Loading data: {i/length:4.0%}")
 
+    # Put enough Nones into the queue to stop the preprocessors & savers.
     for _ in range(num_processors):
         unprocessed_queue.put(None)
 
