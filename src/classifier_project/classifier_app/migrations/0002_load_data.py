@@ -2,6 +2,7 @@
 # are present when Django migrate is run.
 
 from ..classifier import preprocess
+import django.apps.registry
 from django.db import migrations
 import logging
 import multiprocessing
@@ -23,7 +24,7 @@ num_savers = 1
 def process_data(
     unprocessed_queue: multiprocessing.Queue,
     processed_queue: multiprocessing.Queue,
-):
+) -> None:
     """Data preprocessing worker for multi-processing."""
     while True:
         text = unprocessed_queue.get()
@@ -34,7 +35,7 @@ def process_data(
         processed_queue.put(text)  # Hand off the record to the saver queue.
 
 
-def save_data(processed_queue: multiprocessing.Queue):
+def save_data(processed_queue: multiprocessing.Queue) -> None:
     """Data saving worker for multi-processing."""
     count_done = 0
     while True:
@@ -50,7 +51,7 @@ def save_data(processed_queue: multiprocessing.Queue):
             text.humanrating.humanratingclass.save()
 
 
-def load_data(apps, schema_editor):
+def load_data(apps: django.apps.registry, *args, **kwargs) -> None:
     """Load records from CSV"""
 
     start = time.time()

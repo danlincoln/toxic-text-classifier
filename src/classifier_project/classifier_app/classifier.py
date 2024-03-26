@@ -34,7 +34,7 @@ class Classifier(object):
             cls._instance = super(Classifier, cls).__new__(cls)
         return cls._instance
 
-    def train_model(self):
+    def train_model(self) -> None:
         """Train the model. Connects to the classifier database to retrieve
         training data.
         """
@@ -120,14 +120,14 @@ def pos_tags(words: list[str]) -> list[tuple[str, str]]:
     return result
 
 
-def preprocess(text: str):
-    """Given a string, return a list of lower_case, lemmatized words.
+def preprocess(text: str) -> str:
+    """Given a string, return its lower_case, lemmatized representation.
 
     Args:
         text (str): The raw string to process.
 
     Returns:
-        list[str]: The list of lemmatized words.
+        str: The processed string. 
     """
     wnl = WordNetLemmatizer()
 
