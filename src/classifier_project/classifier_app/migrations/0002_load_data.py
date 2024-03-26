@@ -2,8 +2,9 @@
 # are present when Django migrate is run.
 
 from ..classifier import preprocess
-import django.apps.registry
+from django.apps.registry import Apps
 from django.db import migrations
+from django.db.backends.base.schema import BaseDatabaseSchemaEditor
 import logging
 import multiprocessing
 import pandas
@@ -51,7 +52,7 @@ def save_data(processed_queue: multiprocessing.Queue) -> None:
             text.humanrating.humanratingclass.save()
 
 
-def load_data(apps: django.apps.registry, *args, **kwargs) -> None:
+def load_data(apps: Apps, schema_editor: BaseDatabaseSchemaEditor) -> None:
     """Load records from CSV"""
 
     start = time.time()
