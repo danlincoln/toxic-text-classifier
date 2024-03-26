@@ -23,5 +23,5 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - "./src/classifier_project:/app"
+      - "./src/app:/app"
       - "./data:/data"
