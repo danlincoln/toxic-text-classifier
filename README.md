@@ -10,7 +10,7 @@ another running Python.
 ## Getting Started
 
 1. You will need to download the data set from Kaggle for this project. See
-[data/README.md](data/README.md) for more details.
+the next section for more details.
 
 2. Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
@@ -39,6 +39,22 @@ level `docker-compose.yml` is on).
 
 5. When you see startup has completed, open a browser and navigate to 
 [http://localhost:8000](http://localhost:8000)
+
+## Jigsaw Unintended Bias in Toxicity Classification Data Set
+
+This data set was obtained from the *Jigsaw Unintended Bias in Toxicity
+Classification* challenge on [Kaggle](https://www.kaggle.com).
+
+The [competition terms](https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/rules)
+include a section governing the use of this data set.
+
+### Obtaining the Data Set
+
+Because redistribution of this data set outside of Kaggle is forbidden (§7.B.),
+the data set is not included in this repository. To obtain a copy, visit the
+[Kaggle competition page](https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview)
+and agree to the competition rules. You can then download the data. Once
+downloaded, add the .csv files to the [data/](data/) directory.
 
 ## Update Environment Variables
 
