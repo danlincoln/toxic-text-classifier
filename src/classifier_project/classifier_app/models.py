@@ -7,7 +7,7 @@ class Text(models.Model):
     processed = models.TextField()
     classifier = Classifier()
 
-    def classify(self) -> tuple[bool, tuple[float, float]]:
+    def classify(self) -> tuple[bool, float]:
         self.processed = preprocess(self.unprocessed)
         rating, probability = self.classifier.classify(self.processed)
         return rating, probability

@@ -33,9 +33,6 @@ def classify(request):
 
         # Return results to the template (view).
         context["text"] = text
-        p_not_toxic, p_toxic = probability
-        p_not_toxic = f"{p_not_toxic:6.2%}"  # Prettify into percentages.
-        p_toxic = f"{p_toxic:6.2%}"
-        context["p_not_toxic"], context["p_toxic"] = p_not_toxic, p_toxic
+        context["probability"] = f"{probability:6.2%}"
 
     return render(request, "classifier_form.html", context)

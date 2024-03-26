@@ -73,7 +73,7 @@ class Classifier(object):
         self._pipeline = pipeline
         logger.info("Training complete.")
 
-    def classify(self, text: str) -> tuple[bool, tuple[float, float]]:
+    def classify(self, text: str) -> tuple[bool, float]:
         """Classify text.
 
         Args:
@@ -86,7 +86,7 @@ class Classifier(object):
         """
         logger.info(f"Classifying {text}")
         prediction = self._pipeline.predict([text])[0]
-        probability = self._pipeline.predict_proba([text])[0]
+        probability = max(self._pipeline.predict_proba([text])[0])
         return prediction, probability
 
 

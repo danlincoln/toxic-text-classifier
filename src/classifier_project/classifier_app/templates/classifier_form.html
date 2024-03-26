@@ -56,11 +56,7 @@
                         <div class="mx-auto">
                             <span class="fs-6">Confidence: </span>
                             <span class="badge text-bg-secondary p-2">
-                                {% if text.machinerating.rating %}
-                                {{ p_toxic }}
-                                {% else %}
-                                {{ p_not_toxic }}
-                                {% endif %}
+                                {{ probability }}
                             </span>
                         </div>
                     </div>
